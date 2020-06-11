@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server description="new server">
+    <!-- Enable features -->
+    <featureManager>
+        <feature>webProfile-7.0</feature>
+        <feature>localConnector-1.0</feature>
+    </featureManager>
+
+    <!--JPA:-->
+    <jpa defaultPersistenceProvider="org.hibernate.jpa.HibernatePersistenceProvider"/>
+    <dataSource id="DefaultDataSource" jndiName="jdbc/mySQL" type="javax.sql.XADataSource">
+        <jdbcDriver javax.sql.XADataSource="com.mysql.cj.jdbc.MysqlXADataSource" libraryRef="MySQLLib"/>
+        <properties databaseName="hellorest"
+                    user="root" password="root"
+                    portNumber="3306" serverName="localhost" useSSL="false" allowPublicKeyRetrieval="true" serverTimezone="UTC"/>
+    </dataSource>
+    <library id="MySQLLib">
+        <fileset dir="${wlp.install.dir}/usr/shared/resources" includes="mysql.jar"/>
+    </library>
+</server>
