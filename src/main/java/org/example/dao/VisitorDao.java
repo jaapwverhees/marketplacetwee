@@ -7,7 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 @Stateless
-public class VisitorDoa {
+public class VisitorDao {
 
     @PersistenceContext
     private EntityManager em;

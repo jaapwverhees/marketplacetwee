@@ -5,8 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Data
 @NoArgsConstructor
@@ -14,7 +16,9 @@ import javax.persistence.Id;
 @Builder
 @Entity
 public class Visitor {
+
     @Id
+    @Column(name = "EMAIL_ID",nullable = false,unique=true,columnDefinition="VARCHAR(64)")
     private String emailadress;
 
     private String firstname;
