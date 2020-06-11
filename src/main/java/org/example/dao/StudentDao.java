@@ -1,6 +1,6 @@
-package nl.verhees.dao;
+package org.example.dao;
 
-import nl.verhees.domain.Student;
+import org.example.domain.Student;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

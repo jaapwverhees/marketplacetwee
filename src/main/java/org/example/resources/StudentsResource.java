@@ -1,8 +1,8 @@
-package nl.verhees.resources;
+package org.example.resources;
 
-import nl.verhees.domain.Student;
-import nl.verhees.domain.Students;
-import nl.verhees.services.StudentService;
+import org.example.domain.Student;
+import org.example.domain.Students;
+import org.example.services.StudentService;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;

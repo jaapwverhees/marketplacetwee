@@ -1,10 +1,10 @@
-package nl.verhees.resources;
+package org.example.resources;
 
-import nl.verhees.App;
-import nl.verhees.dao.StudentDao;
-import nl.verhees.domain.Student;
-import nl.verhees.domain.Values;
-import nl.verhees.services.StudentService;
+import org.example.App;
+import org.example.dao.StudentDao;
+import org.example.domain.Student;
+import org.example.domain.Values;
+import org.example.services.StudentService;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;

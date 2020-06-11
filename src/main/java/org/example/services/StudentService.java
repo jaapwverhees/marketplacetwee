@@ -1,8 +1,8 @@
-package nl.verhees.services;
+package org.example.services;
 
-import nl.verhees.dao.StudentDao;
-import nl.verhees.domain.Student;
-import nl.verhees.domain.Students;
+import org.example.dao.StudentDao;
+import org.example.domain.Student;
+import org.example.domain.Students;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;

@@ -1,4 +1,4 @@
-package nl.verhees.domain;
+package org.example.domain;
 
 import lombok.NoArgsConstructor;
 import lombok.Value;

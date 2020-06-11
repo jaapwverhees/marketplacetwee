@@ -4,6 +4,7 @@
     <featureManager>
         <feature>webProfile-7.0</feature>
         <feature>localConnector-1.0</feature>
+        <feature>restConnector-2.0</feature>
     </featureManager>
 
     <!--JPA:-->
@@ -17,4 +18,17 @@
     <library id="MySQLLib">
         <fileset dir="${wlp.install.dir}/usr/shared/resources" includes="mysql.jar"/>
     </library>
+
+    <!-- testing -->
+    <jpa defaultPersistenceProvider="org.hibernate.jpa.HibernatePersistenceProvider"/>
+    <dataSource id="testDataSource" jndiName="jdbc/TESTMysql" type="javax.sql.XADataSource">
+        <jdbcDriver javax.sql.XADataSource="com.mysql.cj.jdbc.MysqlXADataSource" libraryRef="MySQLLib"/>
+        <properties databaseName="helloresttest"
+                    user="root" password="root"
+                    portNumber="3306" serverName="localhost" useSSL="false" allowPublicKeyRetrieval="true" serverTimezone="UTC"/>
+    </dataSource>
+    <library id="MySQLLib">
+        <fileset dir="${wlp.install.dir}/usr/shared/resources" includes="mysql.jar"/>
+    </library>
+
 </server>

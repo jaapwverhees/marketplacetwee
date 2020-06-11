@@ -1,4 +1,4 @@
-package nl.verhees.resources;
+package org.example.resources;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;

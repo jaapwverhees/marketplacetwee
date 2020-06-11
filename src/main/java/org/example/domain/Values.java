@@ -1,4 +1,4 @@
-package nl.verhees.domain;
+package org.example.domain;
 
 import java.util.Arrays;
 import java.util.List;
