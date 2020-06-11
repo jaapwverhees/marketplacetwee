@@ -15,10 +15,6 @@
                     user="root" password="root"
                     portNumber="3306" serverName="localhost" useSSL="false" allowPublicKeyRetrieval="true" serverTimezone="UTC"/>
     </dataSource>
-    <library id="MySQLLib">
-        <fileset dir="${wlp.install.dir}/usr/shared/resources" includes="mysql.jar"/>
-    </library>
-
     <!-- testing -->
     <jpa defaultPersistenceProvider="org.hibernate.jpa.HibernatePersistenceProvider"/>
     <dataSource id="testDataSource" jndiName="jdbc/TESTMysql" type="javax.sql.XADataSource">
@@ -30,5 +26,4 @@
     <library id="MySQLLib">
         <fileset dir="${wlp.install.dir}/usr/shared/resources" includes="mysql.jar"/>
     </library>
-
 </server>
