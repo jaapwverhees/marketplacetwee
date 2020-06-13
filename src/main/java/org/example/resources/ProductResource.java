@@ -2,7 +2,6 @@ package org.example.resources;
 
 import org.example.dao.ProductDao;
 import org.example.domain.Product;
-import org.example.domain.Visitor;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -17,7 +16,7 @@ public class ProductResource {
     ProductDao productDao;
 
     @GET
-    public List<Product> get(){
+    public List<Product> get() {
         return productDao.readAllProducts();
     }
 

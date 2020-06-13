@@ -2,9 +2,7 @@ package org.example.resources;
 
 import org.example.App;
 import org.example.dao.ProductDao;
-import org.example.dao.VisitorDao;
 import org.example.domain.Product;
-import org.example.domain.Visitor;
 import org.example.util.ContainerFilter;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -14,18 +12,18 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 
 import javax.inject.Inject;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.core.MediaType;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.List;
 
 import static javax.ws.rs.client.Entity.json;
@@ -33,10 +31,10 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 
 @RunWith(Arquillian.class)
 public class ProductResourceTestIT {
+
     @ArquillianResource
     private URL deploymentURL;
 
@@ -77,7 +75,7 @@ public class ProductResourceTestIT {
     }
 
     @Test
-    public void getAllProducts(){
+    public void getAllProducts() {
         Product productOne = Product.builder()
                 .name("testProduct")
                 .price(222.22)
@@ -98,13 +96,13 @@ public class ProductResourceTestIT {
 
     }
 
-    //FIXME for the time being without thumbnail;
     @Test
     public void PostProduct() {
 
         Product productOne = Product.builder()
                 .name("postTest")
                 .price(999.99)
+                .thumbnail(giveImageAsByteArray())
                 .build();
 
         ClientBuilder.newClient()
@@ -117,11 +115,22 @@ public class ProductResourceTestIT {
         assertNotNull(productTwo);
 
     }
-    private Product findProductByName(List<Product> list, String parameter){
-        for (Product product: list) {
-            if (product.getName().equals(parameter)){
+
+    private Product findProductByName(List<Product> list, String parameter) {
+        for (Product product : list) {
+            if (product.getName().equals(parameter)) {
                 return product;
             }
+        }
+        return null;
+    }
+
+    private byte[] giveImageAsByteArray() {
+        File file = new File("C:\\Users\\jaapw\\Desktop\\markplace 2.0\\images\\image.jpg");
+        try {
+            return Files.readAllBytes(file.toPath());
+        } catch (IOException e) {
+            System.out.println("oops");
         }
         return null;
     }

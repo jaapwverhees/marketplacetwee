@@ -53,25 +53,30 @@ public class VisitorResourceTest {
     }
 
     @Test
-    public void InvalidLoginDoesNotExist() throws Exception {
+    public void InvalidLoginDoesNotExist() {
         when(visitorDao.read(any())).thenReturn(null);
 
-        Exception exception = assertThrows(Exception.class, () -> {
-            visitorResource.Login("IDString", "ThisIsAPassword");
-        });
+        Exception exception = assertThrows(Exception.class, () ->
+                visitorResource.Login("IDString", "ThisIsAPassword"));
 
         assertEquals(exception.getMessage(), "Visitor does Not Exists");
     }
 
     @Test
-    public void InvalidLoginInvalidPassword() throws Exception {
+    public void InvalidLoginInvalidPassword() {
         when(visitorDao.read(any())).thenReturn(visitor);
 
-        Exception exception = assertThrows(Exception.class, () -> {
-            visitorResource.Login("IDString", "ThisIsAInvalidPassword");
-        });
+        Exception exception = assertThrows(Exception.class, () ->
+                visitorResource.Login("IDString", "ThisIsAInvalidPassword"));
 
         assertEquals(exception.getMessage(), "Password is invalid");
+    }
+
+    @Test
+    public void postTestDaoCreateIsCalled(){
+
+        visitorResource.Post(Visitor.builder().build());
+        verify(visitorDao).create(any());
     }
 
 }

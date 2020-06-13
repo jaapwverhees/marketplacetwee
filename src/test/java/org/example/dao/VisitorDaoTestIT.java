@@ -4,7 +4,6 @@ import org.example.App;
 import org.example.domain.Visitor;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
@@ -16,7 +15,6 @@ import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
 import java.io.File;
-import java.net.URL;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -28,16 +26,6 @@ public class VisitorDaoTestIT {
     private VisitorDao dao;
 
     private Visitor visitor;
-
-
-    @Before
-    public void setup() {
-        visitor = Visitor.builder().password("ThisIsAPassword")
-                .emailadress("test@test.nl")
-                .firstname("firstname")
-                .lastname("lastname")
-                .build();
-    }
 
     @Deployment
     public static Archive<?> createDeployment() {
@@ -59,6 +47,15 @@ public class VisitorDaoTestIT {
                 .resolve("org.hibernate:hibernate-entitymanager")
                 .withTransitivity()
                 .asFile();
+    }
+
+    @Before
+    public void setup() {
+        visitor = Visitor.builder().password("ThisIsAPassword")
+                .emailadress("test@test.nl")
+                .firstname("firstname")
+                .lastname("lastname")
+                .build();
     }
 
     @Test

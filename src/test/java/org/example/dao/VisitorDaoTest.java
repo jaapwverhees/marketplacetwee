@@ -28,7 +28,7 @@ public class VisitorDaoTest {
     VisitorDao dao;
 
     @Test
-    public void verifyEntityManagerPersistIsCalled() {
+    public void verifyEntityManagerPersist() {
         doNothing().when(emMock).persist(any());
 
         dao.create(Visitor.builder().build());
@@ -37,7 +37,7 @@ public class VisitorDaoTest {
     }
 
     @Test
-    public void verifyEntityManagerFindIsCalled() {
+    public void verifyEntityManagerFind() {
         when(emMock.find(any(), any())).thenReturn(new Visitor());
 
         dao.read("string");

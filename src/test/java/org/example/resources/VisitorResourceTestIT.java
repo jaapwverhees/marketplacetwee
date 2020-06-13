@@ -2,9 +2,9 @@ package org.example.resources;
 
 import junit.framework.TestCase;
 import org.example.App;
-import org.example.util.ContainerFilter;
 import org.example.dao.VisitorDao;
 import org.example.domain.Visitor;
+import org.example.util.ContainerFilter;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
@@ -25,7 +25,7 @@ import java.io.File;
 import java.net.URL;
 
 import static javax.ws.rs.client.Entity.json;
-import static javax.ws.rs.core.MediaType.*;
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -72,7 +72,7 @@ public class VisitorResourceTestIT extends TestCase {
     }
 
     @Test
-    public void getVisitor(){
+    public void getVisitor() {
         Visitor visitor = Visitor.builder()
                 .emailadress("getVisitor@email.com")
                 .firstname("firstname")

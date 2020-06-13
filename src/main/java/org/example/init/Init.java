@@ -19,11 +19,12 @@ public class Init {
     ProductDao productDao;
 
     @GET
-    public void start() {
+    public String start() {
         List<Product> products = generateSixProducts();
         for (Product product : products) {
             productDao.create(product);
         }
+        return "database initialized";
     }
 
     private List<Product> generateSixProducts() {

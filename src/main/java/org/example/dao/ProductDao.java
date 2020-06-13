@@ -1,7 +1,6 @@
 package org.example.dao;
 
 import org.example.domain.Product;
-import org.example.domain.Visitor;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -20,7 +19,7 @@ public class ProductDao {
         return query.getResultList();
     }
 
-    public void create(Product product){
+    public void create(Product product) {
         em.persist(product);
     }
 }

@@ -1,6 +1,5 @@
 package org.example.domain;
 
-import org.example.domain.Visitor;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -46,6 +45,7 @@ public class VisitorTest {
         visitor.setEmailadress("valid@valid.com");
         assertTrue(visitor.valid());
     }
+
     @Test
     public void validMethodReturnsFalseForInvalidFirstName() {
         visitor.setFirstname(null);
@@ -69,18 +69,21 @@ public class VisitorTest {
         visitor.setLastname("lastNameIsLongerThenTwentyCharacters");
         assertFalse(visitor.valid());
     }
+
     @Test
     public void validMethodReturnsTrueFoValidLastName() {
         visitor.setLastname("smith");
         assertTrue(visitor.valid());
     }
+
     @Test
-    public void validMethodReturnsTrueForValidPassword(){
+    public void validMethodReturnsTrueForValidPassword() {
         visitor.setPassword("thisIsAValidPassword");
         assertTrue(visitor.valid());
     }
+
     @Test
-    public void validMethodReturnsFalseForInvalidPassword(){
+    public void validMethodReturnsFalseForInvalidPassword() {
         visitor.setPassword("thisIsAValidPassword");
         assertTrue(visitor.valid());
     }
