@@ -6,7 +6,7 @@
              version="2.1">
 
     <persistence-unit name="MySQL" transaction-type="JTA">
-        <jta-data-source>jdbc/TESTMysql</jta-data-source> <!--corresponds with server.xml-->
+        <jta-data-source>jdbc/test</jta-data-source> <!--corresponds with server.xml-->
 
         <properties>
             <property name="hibernate.show_sql" value="true"/>

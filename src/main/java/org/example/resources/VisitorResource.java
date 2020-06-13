@@ -6,7 +6,14 @@ import org.example.domain.Visitor;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.container.ContainerResponseContext;
+import javax.ws.rs.container.ContainerResponseFilter;
+import javax.ws.rs.ext.Provider;
+import java.io.IOException;
 
 @Path("visitor")
 public class VisitorResource {
@@ -14,23 +21,24 @@ public class VisitorResource {
     @Inject
     VisitorDao visitorDao;
 
-//    @GET
-//    public Visitor Login(String email, String passWord) throws Exception {
-//        Visitor visitor = visitorDao.read(email);
-//        if(visitor == null){
-//            throw new Exception("Visitor does Not Exists");
-//        }
-//        if(visitor.getPassword().equals(passWord)){
-//            return visitor;
-//        } else if(!visitor.getPassword().equals(passWord)){
-//            throw new Exception("Password is invalid");
-//        } else{
-//            throw new Exception("unknown Error");
-//        }
-//    }
-    //for debug, must be removed
+
     @GET
-    public Visitor getVisitor(){
-        return visitorDao.read("test@test.nl");
+    public Visitor Login(@QueryParam("email") String email, @QueryParam("password") String password) throws Exception {
+        Visitor visitor = visitorDao.read(email);
+        loginValiditor(visitor, password);
+        return visitor;
+    }
+
+    @POST
+    public void Post(Visitor visitor) {
+        visitorDao.create(visitor);
+    }
+
+    void loginValiditor(Visitor visitor, String password) throws Exception {
+        if (visitor == null) {
+            throw new Exception("Visitor does Not Exists");
+        } else if (!visitor.getPassword().equals(password)) {
+            throw new Exception("Password is invalid");
+        }
     }
 }

@@ -1,6 +1,7 @@
 package org.example.dao;
 
 import org.example.App;
+import org.example.domain.Product;
 import org.example.domain.Visitor;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -17,34 +18,39 @@ import org.junit.runner.RunWith;
 import javax.inject.Inject;
 import java.io.File;
 import java.net.URL;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(Arquillian.class)
-public class VisitorDaoTestIT {
+public class ProductDaoTestIT {
 
     @Inject
-    private VisitorDao dao;
+    private ProductDao dao;
 
-    private Visitor visitor;
-
+    private  Product productOne;
+    private  Product productTwo;
 
     @Before
     public void setup() {
-        visitor = Visitor.builder().password("ThisIsAPassword")
-                .emailadress("test@test.nl")
-                .firstname("firstname")
-                .lastname("lastname")
+        productOne = Product.builder()
+                .name("testProduct")
+                .price(222.22)
                 .build();
+        productTwo = Product.builder()
+                .name("testProduct")
+                .price(222.22)
+                .build();
+
     }
 
     @Deployment
     public static Archive<?> createDeployment() {
         WebArchive archive = ShrinkWrap.create(WebArchive.class, "test.war")
                 .addClass(App.class) // dont forget!
-                .addClass(Visitor.class)
-                .addClass(VisitorDao.class)
+                .addClass(Product.class)
+                .addClass(ProductDao.class)
                 .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsLibraries(hibernate());
@@ -62,10 +68,11 @@ public class VisitorDaoTestIT {
     }
 
     @Test
-    public void createVisitor() {
-        dao.create(visitor);
-        Visitor visitor = dao.read("test@test.nl");
-        assertNotNull(visitor);
-        assertEquals(visitor.getFirstname(), "firstname");
+    public void TestCreateAndReadAllProducts(){
+        dao.create(productOne);
+        dao.create(productTwo);
+        List<Product> products = dao.readAllProducts();
+        assertNotNull(products);
+        assertEquals(products.size(), 2);
     }
 }

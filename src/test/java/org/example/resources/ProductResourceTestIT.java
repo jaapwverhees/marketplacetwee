@@ -1,10 +1,11 @@
 package org.example.resources;
 
 import org.example.App;
-import org.example.dao.StudentDao;
-import org.example.domain.Student;
-import org.example.domain.Values;
-import org.example.services.StudentService;
+import org.example.dao.ProductDao;
+import org.example.dao.VisitorDao;
+import org.example.domain.Product;
+import org.example.domain.Visitor;
+import org.example.util.ContainerFilter;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
@@ -16,37 +17,38 @@ import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 
+import javax.inject.Inject;
 import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
+import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.core.MediaType;
 import java.io.File;
 import java.net.URL;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 @RunWith(Arquillian.class)
-public class StudentsResourceIT {
-
+public class ProductResourceTestIT {
     @ArquillianResource
     private URL deploymentURL;
 
-    private String studentsResource;
+    private String productResource;
 
-    @Before
-    public void setup() {
-        studentsResource = deploymentURL + "resources/students";
-    }
+    @Inject
+    private ProductDao dao;
+
 
     @Deployment
     public static Archive<?> createDeployment() {
         WebArchive archive = ShrinkWrap.create(WebArchive.class, "test.war")
                 .addClass(App.class) // dont forget!
-                .addClass(StudentsResource.class)
-                .addClass(StudentService.class)
-                .addClass(StudentDao.class)
-                .addPackage(Student.class.getPackage())
+                .addClass(Product.class)
+                .addClass(ProductDao.class)
+                .addClass(ProductResource.class)
+                .addClass(ContainerFilter.class)
+                .addClass(ContainerResponseFilter.class)
                 .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsLibraries(hibernate());
@@ -63,24 +65,30 @@ public class StudentsResourceIT {
                 .asFile();
     }
 
+    @Before
+    public void setup() {
+        productResource = deploymentURL + "resources/products";
+    }
+
     @Test
-    public void getStudentsReturnsStudents() {
+    public void getAllProducts(){
+        Product productOne = Product.builder()
+                .name("testProduct")
+                .price(222.22)
+                .build();
+        Product productTwo = Product.builder()
+                .name("testProduct")
+                .price(222.22)
+                .build();
+
+        dao.create(productOne);
+        dao.create(productTwo);
         String message = ClientBuilder.newClient()
-                .target(studentsResource)
+                .target(productResource)
                 .request(MediaType.APPLICATION_JSON)
                 .get(String.class);
 
-        assertThat(message, containsString("{\"students\":["));
+        assertThat(message, containsString("[{\"id\":1,\"name\":\"testProduct\",\"price\":222.22},{\"id\":2,\"name\":\"testProduct\",\"price\":222.22}]"));
+
     }
-
-    @Test
-    public void postStudentAddsStudentToResource() {
-        Student response = ClientBuilder.newClient()
-                .target(studentsResource)
-                .request(MediaType.APPLICATION_JSON)
-                .post(Entity.json(Values.JANSSENS), Student.class);
-
-        assertThat(response.getId(), is(not(nullValue())));
-    }
-
 }

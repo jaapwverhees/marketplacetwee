@@ -16,8 +16,8 @@ public class VisitorDao {
         em.persist(visitor);
     }
 
-    public Visitor read(String emailAdress){
-        return em.find(Visitor.class, emailAdress);
+    public Visitor read(String emailAddress){
+        return em.find(Visitor.class, emailAddress);
     }
 
 }
