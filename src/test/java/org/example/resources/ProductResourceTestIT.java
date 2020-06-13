@@ -14,6 +14,7 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,9 +26,14 @@ import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.core.MediaType;
 import java.io.File;
 import java.net.URL;
+import java.util.List;
 
+import static javax.ws.rs.client.Entity.json;
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 @RunWith(Arquillian.class)
 public class ProductResourceTestIT {
@@ -90,5 +96,33 @@ public class ProductResourceTestIT {
 
         assertThat(message, containsString("[{\"id\":1,\"name\":\"testProduct\",\"price\":222.22},{\"id\":2,\"name\":\"testProduct\",\"price\":222.22}]"));
 
+    }
+
+    //FIXME for the time being without thumbnail;
+    @Test
+    public void PostProduct() {
+
+        Product productOne = Product.builder()
+                .name("postTest")
+                .price(999.99)
+                .build();
+
+        ClientBuilder.newClient()
+                .target(productResource)
+                .request(APPLICATION_JSON)
+                .post(json(productOne), Product.class);
+
+        Product productTwo = findProductByName(dao.readAllProducts(), "postTest");
+
+        assertNotNull(productTwo);
+
+    }
+    private Product findProductByName(List<Product> list, String parameter){
+        for (Product product: list) {
+            if (product.getName().equals(parameter)){
+                return product;
+            }
+        }
+        return null;
     }
 }
