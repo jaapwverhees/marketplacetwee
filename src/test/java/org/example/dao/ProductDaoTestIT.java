@@ -2,10 +2,8 @@ package org.example.dao;
 
 import org.example.App;
 import org.example.domain.Product;
-import org.example.domain.Visitor;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
@@ -17,7 +15,6 @@ import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
 import java.io.File;
-import java.net.URL;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -29,21 +26,8 @@ public class ProductDaoTestIT {
     @Inject
     private ProductDao dao;
 
-    private  Product productOne;
-    private  Product productTwo;
-
-    @Before
-    public void setup() {
-        productOne = Product.builder()
-                .name("testProduct")
-                .price(222.22)
-                .build();
-        productTwo = Product.builder()
-                .name("testProduct")
-                .price(222.22)
-                .build();
-
-    }
+    private Product productOne;
+    private Product productTwo;
 
     @Deployment
     public static Archive<?> createDeployment() {
@@ -67,8 +51,21 @@ public class ProductDaoTestIT {
                 .asFile();
     }
 
+    @Before
+    public void setup() {
+        productOne = Product.builder()
+                .name("testProduct")
+                .price(222.22)
+                .build();
+        productTwo = Product.builder()
+                .name("testProduct")
+                .price(222.22)
+                .build();
+
+    }
+
     @Test
-    public void TestCreateAndReadAllProducts(){
+    public void TestCreateAndReadAllProducts() {
         dao.create(productOne);
         dao.create(productTwo);
         List<Product> products = dao.readAllProducts();

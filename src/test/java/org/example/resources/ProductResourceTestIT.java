@@ -30,6 +30,7 @@ import static javax.ws.rs.client.Entity.json;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(Arquillian.class)
@@ -97,6 +98,36 @@ public class ProductResourceTestIT {
     }
 
     @Test
+    public void getByName(){
+        Product productOne = Product.builder()
+                .name("product")
+                .price(222.22)
+                .build();
+        Product productTwo = Product.builder()
+                .name("toyota")
+                .price(222.22)
+                .build();
+        Product productThree = Product.builder()
+                .name("viaduct")
+                .price(222.22)
+                .build();
+
+        dao.create(productOne);
+        dao.create(productTwo);
+        dao.create(productThree);
+        String message = ClientBuilder.newClient()
+                .target(productResource + "/duct")
+                .request(MediaType.APPLICATION_JSON)
+                .get(String.class);
+
+        assertFalse(message.contains("toyota"));
+        assertThat(message, containsString("product"));
+        assertThat(message, containsString("viaduct"));
+
+
+    }
+
+    @Test
     public void PostProduct() {
 
         Product productOne = Product.builder()
@@ -110,13 +141,13 @@ public class ProductResourceTestIT {
                 .request(APPLICATION_JSON)
                 .post(json(productOne), Product.class);
 
-        Product productTwo = findProductByName(dao.readAllProducts(), "postTest");
+        Product productTwo = findProductFromArray(dao.readAllProducts(), "postTest");
 
         assertNotNull(productTwo);
 
     }
 
-    private Product findProductByName(List<Product> list, String parameter) {
+    private Product findProductFromArray(List<Product> list, String parameter) {
         for (Product product : list) {
             if (product.getName().equals(parameter)) {
                 return product;

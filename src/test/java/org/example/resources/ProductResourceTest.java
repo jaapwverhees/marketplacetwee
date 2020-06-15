@@ -55,6 +55,17 @@ public class ProductResourceTest {
 
         verify(productDao).readAllProducts();
     }
+    @Test
+    public void daoReadByNameIsCalled(){
+        List<Product> productList = new ArrayList<>();
+        productList.add(product);
+
+        when(productDao.readByName(any())).thenReturn(productList);
+
+        assertEquals(productList, productResource.getByName("test"));
+
+        verify(productDao).readByName(any());
+    }
 
     @Test
     public void daoCreateIsCalled(){

@@ -21,6 +21,9 @@ public class Init {
     @GET
     public String start() {
         List<Product> products = generateSixProducts();
+        products.add(generateUniqueProduct("toyota"));
+        products.add(generateUniqueProduct("frisbee"));
+        products.add(generateUniqueProduct("viaduct"));
         for (Product product : products) {
             productDao.create(product);
         }
@@ -38,6 +41,14 @@ public class Init {
     private Product generateGenericProduct() {
         return Product.builder()
                 .name("product")
+                .price(22.22)
+                .thumbnail(extractBytes())
+                .build();
+    }
+
+    private Product generateUniqueProduct(String name) {
+        return Product.builder()
+                .name(name)
                 .price(22.22)
                 .thumbnail(extractBytes())
                 .build();

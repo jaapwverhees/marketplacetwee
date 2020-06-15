@@ -4,9 +4,7 @@ import org.example.dao.ProductDao;
 import org.example.domain.Product;
 
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import java.util.List;
 
 @Path("products")
@@ -23,5 +21,11 @@ public class ProductResource {
     @POST
     public void Post(Product product) {
         productDao.create(product);
+    }
+
+    @GET
+    @Path("{name}")
+    public List<Product> getByName(@PathParam("name") String name){
+        return productDao.readByName(name);
     }
 }

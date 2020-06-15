@@ -26,8 +26,8 @@ public class VisitorResource {
 
     //FIXME add additional validation. add password generation. add mail service for password.
     @POST
-    public void Post(Visitor visitor) {
-        visitorDao.create(visitor);
+    public Visitor Post(Visitor visitor) {
+        return visitorDao.create(visitor);
     }
 
     void loginValidator(Visitor visitor, String password) throws Exception {

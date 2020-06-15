@@ -12,8 +12,9 @@ public class VisitorDao {
     @PersistenceContext
     private EntityManager em;
 
-    public void create(Visitor visitor){
+    public Visitor create(Visitor visitor){
         em.persist(visitor);
+        return visitor;
     }
 
     public Visitor read(String emailAddress){

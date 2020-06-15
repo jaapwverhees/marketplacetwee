@@ -6,6 +6,9 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Stateless
@@ -21,5 +24,11 @@ public class ProductDao {
 
     public void create(Product product) {
         em.persist(product);
+    }
+
+    public List<Product> readByName(String name) {
+        TypedQuery<Product> query = em.createQuery("SELECT p FROM Product p WHERE p.name LIKE : name", Product.class);
+        query.setParameter("name", "%" + name + "%");
+        return query.getResultList();
     }
 }
