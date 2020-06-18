@@ -7,7 +7,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class VisitorTest {
-    Visitor visitor;
+
+    private Visitor visitor;
 
     @Before
     public void setup() {

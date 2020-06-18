@@ -47,6 +47,6 @@ public class Visitor {
     }
 
     private boolean validPassword() {
-        return this.password != null && (this.password.length() >= 12 && this.password.length() <= 30);
+        return this.password != null && (this.password.length() >= 12 && this.password.length() <= 60);
     }
 }

@@ -3,6 +3,7 @@ package org.example.resources;
 
 import org.example.dao.VisitorDao;
 import org.example.domain.Visitor;
+import org.example.util.PasswordAuthentication;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -14,7 +15,10 @@ import javax.ws.rs.QueryParam;
 public class VisitorResource {
 
     @Inject
-    VisitorDao visitorDao;
+    private PasswordAuthentication authentication;
+
+    @Inject
+    private VisitorDao visitorDao;
 
 
     @GET
@@ -24,16 +28,20 @@ public class VisitorResource {
         return visitor;
     }
 
-    //FIXME add additional validation. add password generation. add mail service for password.
+    //TODO add password generation. add mail service for password.
     @POST
     public Visitor Post(Visitor visitor) {
-        return visitorDao.create(visitor);
+        if(visitor.valid()){
+            visitor.setPassword(authentication.hash(visitor.getPassword()));
+            return visitorDao.create(visitor);
+        }
+        return null;
     }
 
     void loginValidator(Visitor visitor, String password) throws Exception {
         if (visitor == null) {
             throw new Exception("Visitor does Not Exists");
-        } else if (!visitor.getPassword().equals(password)) {
+        } else if (!authentication.authenticate(password.toCharArray(), visitor.getPassword())) {
             throw new Exception("Password is invalid");
         }
     }

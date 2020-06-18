@@ -2,6 +2,7 @@ package org.example.resources;
 
 import org.example.dao.VisitorDao;
 import org.example.domain.Visitor;
+import org.example.util.PasswordAuthentication;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,10 +17,16 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class VisitorResourceTest {
 
-    Visitor visitor;
+    private Visitor visitor;
 
     @Mock
     private VisitorDao visitorDao;
+
+
+    private final PasswordAuthentication auth = new PasswordAuthentication();
+
+    @Mock
+    private PasswordAuthentication authMock;
 
     @InjectMocks
     private VisitorResource visitorResource;
@@ -30,15 +37,16 @@ public class VisitorResourceTest {
                 .emailadress("email@email.com")
                 .firstname("firstname")
                 .lastname("lastname")
-                .password("ThisIsAPassword")
+                .password(auth.hash("ThisIsAPassword1!"))
                 .build();
     }
 
     @Test
     public void VerifyVisitorDotReadIsCalled() throws Exception {
         when(visitorDao.read(any())).thenReturn(visitor);
+        when(authMock.authenticate(any(), any())).thenReturn(true);
 
-        visitorResource.Login("IDString", "ThisIsAPassword");
+        visitorResource.Login("IDString", "ThisIsAPassword1!");
 
         verify(visitorDao).read("IDString");
     }
@@ -47,7 +55,9 @@ public class VisitorResourceTest {
     public void validLogin() throws Exception {
         when(visitorDao.read(any())).thenReturn(visitor);
 
-        visitorResource.Login("IDString", "ThisIsAPassword");
+        when(authMock.authenticate(any(), any())).thenReturn(true);
+
+        visitorResource.Login("IDString", "ThisIsAPassword1!");
 
         assertEquals(visitorDao.read("IDString"), visitor);
     }
@@ -57,7 +67,7 @@ public class VisitorResourceTest {
         when(visitorDao.read(any())).thenReturn(null);
 
         Exception exception = assertThrows(Exception.class, () ->
-                visitorResource.Login("IDString", "ThisIsAPassword"));
+                visitorResource.Login("IDString", "ThisIsAPassword1!"));
 
         assertEquals(exception.getMessage(), "Visitor does Not Exists");
     }
@@ -66,16 +76,20 @@ public class VisitorResourceTest {
     public void InvalidLoginInvalidPassword() {
         when(visitorDao.read(any())).thenReturn(visitor);
 
+        when(authMock.authenticate(any(), any())).thenReturn(false);
+
         Exception exception = assertThrows(Exception.class, () ->
-                visitorResource.Login("IDString", "ThisIsAInvalidPassword"));
+                visitorResource.Login("IDString", "ThisIsAInvalidPassword1!"));
 
         assertEquals(exception.getMessage(), "Password is invalid");
     }
 
     @Test
-    public void postTestDaoCreateIsCalled(){
+    public void postTestDaoCreateIsCalled() {
+        when(authMock.hash(any())).thenReturn("hashedString");
 
-        visitorResource.Post(Visitor.builder().build());
+        visitorResource.Post(visitor);
+
         verify(visitorDao).create(any());
     }
 

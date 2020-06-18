@@ -11,7 +11,7 @@ import java.util.List;
 public class ProductResource {
 
     @Inject
-    ProductDao productDao;
+    private ProductDao productDao;
 
     @GET
     public List<Product> get() {

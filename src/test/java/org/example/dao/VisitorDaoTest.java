@@ -19,13 +19,11 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class VisitorDaoTest {
     @Mock
-    EntityManager emMock;
-    @Mock
-    EntityTransaction entityTransactionMock;
+    private EntityManager emMock;
 
 
     @InjectMocks
-    VisitorDao dao;
+    private VisitorDao dao;
 
     @Test
     public void verifyEntityManagerPersist() {

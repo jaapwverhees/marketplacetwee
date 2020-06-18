@@ -16,7 +16,7 @@ import java.util.List;
 public class Init {
 
     @Inject
-    ProductDao productDao;
+    private ProductDao productDao;
 
     @GET
     public String start() {

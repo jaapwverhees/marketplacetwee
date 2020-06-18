@@ -27,6 +27,7 @@ public class ProductDaoTestIT {
     private ProductDao dao;
 
     private Product productOne;
+
     private Product productTwo;
 
     @Deployment

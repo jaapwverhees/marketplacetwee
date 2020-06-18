@@ -98,7 +98,7 @@ public class ProductResourceTestIT {
     }
 
     @Test
-    public void getByName(){
+    public void getByName() {
         Product productOne = Product.builder()
                 .name("product")
                 .price(222.22)

@@ -5,6 +5,7 @@ import org.example.App;
 import org.example.dao.VisitorDao;
 import org.example.domain.Visitor;
 import org.example.util.ContainerFilter;
+import org.example.util.PasswordAuthentication;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
@@ -41,6 +42,9 @@ public class VisitorResourceTestIT extends TestCase {
     @Inject
     private VisitorDao visitorDao;
 
+    @Inject
+    private PasswordAuthentication passwordAuthentication;
+
     @Deployment
     public static Archive<?> createDeployment() {
         WebArchive archive = ShrinkWrap.create(WebArchive.class, "test.war")
@@ -50,6 +54,7 @@ public class VisitorResourceTestIT extends TestCase {
                 .addClass(VisitorResource.class)
                 .addClass(ContainerFilter.class)
                 .addClass(ContainerResponseFilter.class)
+                .addClass(PasswordAuthentication.class)
                 .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsLibraries(hibernate());
@@ -77,7 +82,7 @@ public class VisitorResourceTestIT extends TestCase {
                 .emailadress("getVisitor@email.com")
                 .firstname("firstname")
                 .lastname("lastname")
-                .password("thisIsAPassword")
+                .password(passwordAuthentication.hash("thisIsAPassword"))
                 .build();
         visitorDao.create(visitor);
         String message = ClientBuilder.newClient()
@@ -87,7 +92,7 @@ public class VisitorResourceTestIT extends TestCase {
                 .request(MediaType.APPLICATION_JSON)
                 .get(String.class);
 
-        assertThat(message, containsString("{\"emailadress\":\"getVisitor@email.com\",\"firstname\":\"firstname\",\"lastname\":\"lastname\",\"password\":\"thisIsAPassword\"}"));
+        assertThat(message, containsString("{\"emailadress\":\"getVisitor@email.com\",\"firstname\":\"firstname\",\"lastname\":\"lastname\","));
 
     }
 
@@ -104,6 +109,6 @@ public class VisitorResourceTestIT extends TestCase {
                 .target(visitorResource)
                 .request(APPLICATION_JSON)
                 .post(json(visitor), Visitor.class);
-        assertEquals(visitor, visitorDao.read("testPostVisitor@email.com"));
+        assertEquals(visitor.getFirstname(), visitorDao.read("testPostVisitor@email.com").getFirstname());
     }
 }
